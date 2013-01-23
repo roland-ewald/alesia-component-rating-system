@@ -1,6 +1,6 @@
 
 
-package alesia.componentranking.util
+package alesia.componentrating.misc
 
 import java.io.PrintWriter
 import java.io.File

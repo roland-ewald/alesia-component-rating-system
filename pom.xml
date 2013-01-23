@@ -81,6 +81,14 @@
 			<artifactId>xstream</artifactId>
 			<version>1.4.3</version>
 		</dependency>
+		
+		<!-- Math (Error function 'erf' required) -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-math3</artifactId>
+			<version>3.1.1</version>
+		</dependency>
+		
 	</dependencies>
 
 	<!-- BUILDING -->

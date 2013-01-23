@@ -1,0 +1,88 @@
+package alesia.componentrating
+
+/**
+ * General interface for component rating system.
+ * This is intended to be used in passive way, i.e. submitting results via
+ * {@link ComponentRatingSystem#submitResults} incrementally improves the ranking that eventually
+ * reflect the overall performance of the components. Each component is associated with a (real) value of
+ * 'points' that estimates the expected strength/suitability/etc. of the components in the relation to the others.
+ * Additionally, each component is associated with an uncertainty (also given a real number), which refers
+ * to the 'points' estimate of that component.
+ *
+ * The ranking can be used via the Comparator interface.
+ *
+ * @see java.util.Comparator
+ *
+ * @author Jonathan Wienss
+ * @author Michael Stein
+ * @author Roland Ewald
+ */
+trait ComponentRatingSystem extends java.util.Comparator[String] {
+
+  /**
+   * Submits new results to knowledge base.
+   * This adds new observation and triggers a new ranking (update) of the components in this set of results.
+   * @param rankingForProblem the teams in the order of the ranking (best first)
+   */
+  def submitResults(rankingForProblem: List[Set[String]]): Unit
+
+  /**
+   * Compares two components based on their current ranking.
+   * @param c1 id of component 1
+   * @param c2 id of component 2
+   * @see java.util.Comparator
+   * @return number smaller than 0 iff c1 < c2, greater than 0 iff (c2 > c1), 0 otherwise
+   */
+  def compare(c1: String, c2: String): Int
+
+  /**
+   * Deletes the knowledge base.
+   */
+  def reset(): Unit
+
+  /**
+   * @param comp the component id
+   * @return the expected points of the component
+   */
+  def getPoints(comp: String): Double
+
+  /**
+   * @param comp the component id
+   * @return the uncertainty of the 'points' estimation of this component
+   */
+  def getUncertainty(comp: String): Double
+
+  /**
+   * Call this to indicate that a component has been changed.
+   * The uncertainty of the 'points' estimation will be adjusted (this is implementation-specific).
+   * @param comp the component id
+   */
+  def componentUpdated(comp: String): Unit
+
+  /**
+   * Ranks several components.
+   * @param components the component ids
+   * @return ranking of components (best first)
+   */
+  def compareComponents(components: String*): List[String] = components.toList.sortWith((c1, c2) => compare(c1, c2) < 0)
+
+  /**
+   * Set the Partial Play factor for a certain component. Standard is 1.0 which is used if a factor for a player is not set.
+   * @param factor The Partial Play factor for this component. Standard is 1.0. E.g.: use 0.5 to achieve 50% Partial Play.
+   */
+  def setPartialPlayFactor(comp: String, factor: Double)
+  
+  /**
+   * If True, the Partial Play factor of each componen in a compound algorithm is weighted against the number of components 
+   * in that algorithm in such a way, that the sum of all prefactors of components of that algorithm is 1. 
+   * In other words the number of other components of an algorithm is no longer affecting the ranking of a component.
+   */
+  def setWeightPartialPlayAgainstTeamSize(b: Boolean)
+  
+  /**
+   * Inject the rating (points and uncertainty) of one component into the Rating System. The new rating overwrites any old 
+   * rating, this component might have had in the system before
+   * 
+   */
+  def injectRating(comp:String, points:Double, uncertainty:Double): Unit
+}
