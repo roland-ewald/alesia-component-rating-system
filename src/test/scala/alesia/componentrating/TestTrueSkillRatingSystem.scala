@@ -42,9 +42,11 @@ class TestTrueSkillRatingSystem extends FunSpec with Logging {
       List(players(1), players(2)),
       List(players(2), players(0))))
   }
+
   describe("Four Components are ranked in 2 teams of 2") {
     testMultiRatingProblem(players, Helper.linearCombination(Helper.linearCombination(players, 2, false), 2, false))
   }
+
   // Here: Each team consists of only one component (Player)
   private def testSimpleRatingProblem(ratingProblem: List[PlayerProperties], ganes: List[List[PlayerProperties]]) {
 
