@@ -341,7 +341,7 @@ class Scheduler {
     stepDown2.foreach(s => s.execute)
     stepDown3.foreach(s => s.execute)
 
-    // Approximative Aproach:
+    // Approximative Approach:
     stepApRight.foreach(s => s.execute);
     stepApLeft.foreach(s => s.execute);
     do {

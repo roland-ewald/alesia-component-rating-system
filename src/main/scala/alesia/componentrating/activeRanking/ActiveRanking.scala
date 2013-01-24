@@ -21,7 +21,7 @@ import alesia.componentrating.misc.AdvancedOptions
  *
  */
 class ActiveRanking(
-  val dflt: TrueSkillDefaultValues = new TrueSkillDefaultValues(),
+  val dflt: TrueSkillDefaultValues = new TrueSkillDefaultValues,
   val advOpt: AdvancedOptions = new AdvancedOptions,
   val rng: Random,
   val stopCondition: StopCondition,

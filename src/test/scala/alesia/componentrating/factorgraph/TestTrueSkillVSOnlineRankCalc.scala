@@ -12,6 +12,7 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
+import com.weiglewilczek.slf4s.Logging
 
 /**
  * Compares results with the TrueSkill Online Rank Calculator by Microsoft.
@@ -23,7 +24,7 @@ import org.scalatest.junit.JUnitRunner
  * @author Roland Ewald
  */
 @RunWith(classOf[JUnitRunner])
-class TestTrueSkillVSOnlineRankCalc extends FunSpec with com.weiglewilczek.slf4s.Logging {
+class TestTrueSkillVSOnlineRankCalc extends FunSpec with Logging {
 
   val dflt = new TrueSkillDefaultValues(delta = 1e-08, debug = false)
 

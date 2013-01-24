@@ -6,13 +6,14 @@ import scala.util.Random
 
 /**
  * Contains functions that are used often and under different context throughout the code
- * 
+ *
  * @author Jonathan Wienss
  */
 object Helper {
+
   /**
    * Yields all combinations of elements of a list up to a given size.
-   * 
+   *
    * @param list the elements are drawn from this list
    * @param size maximum size of the result
    * @param repeat weather an element can be multiple times in the result

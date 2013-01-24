@@ -60,7 +60,7 @@ class NormalDist(val precision: Double, val precAdjustMean: Double) {
   def cumulativePropability(x: Double): Double = 0.5 + 0.5 * Erf.erf(x / scala.math.sqrt(2))
 
   /**
-   * density function of this normal distribution
+   * Density function of this normal distribution
    */
   def density(x: Double) = 1.0 / (stDev * sqrt(2.0 * Pi)) * exp(-0.5 * pow((x - mean) / stDev, 2.0))
 
