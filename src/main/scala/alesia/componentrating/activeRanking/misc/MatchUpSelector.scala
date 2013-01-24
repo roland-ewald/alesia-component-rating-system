@@ -12,6 +12,7 @@ import alesia.componentrating.misc.Helper
  * @param <T> Type of the Teams (which can be List[String] or otherwise)
  */
 abstract class MatchUpSelector[T](val matchQuality: MatchQuality[T]) {
+
   var allPossibleTeamUps: List[List[T]] = null // Error if not initialised!
   val allPossibleTeamUpsBase = HashMap[String, List[List[T]]]()
   var rng: Random = null

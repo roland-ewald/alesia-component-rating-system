@@ -10,6 +10,7 @@ import scala.collection.mutable.HashMap
  * @author Jonathan Wienss
  */
 abstract class Distance {
+
   /**
    * The arrays/lists are provided in HashMaps (Element) -> (Position)
    * This allows empty positions etc.
@@ -32,6 +33,7 @@ abstract class Distance {
   def getDistanceIntersected[T](first: HashMap[T, Int], second: HashMap[T, Int]): Int = {
     return getDistance(intersection(first, second), intersection(second, first))
   }
+
   def getDistanceIntersected[T](first: List[T], second: List[T]): Int = {
     val firstMap = HashMap[T, Int]()
     val secondMap = HashMap[T, Int]()
@@ -54,15 +56,17 @@ abstract class Distance {
 }
 
 /**
- * Hamming Distance ("Number of wrong digits")
+ * Hamming Distance ("Number of wrong digits").
  *
- * Reimplemented to be invariant vs missing ranks (and thus intersections from above which very likely have missing ranks)
+ * Implemented to be invariant vs missing ranks (and thus intersections from above which very likely have missing ranks).
+ *
  * @author Jonathan Wienss
  *
  * missing rank: (a -> 1), (b -> 2), (c -> 4)  [<- should be rank 3]
  *
  */
 class HammingDistance extends Distance {
+
   def getDistance[T](first: HashMap[T, Int], second: HashMap[T, Int]): Int = {
     var tFirst = first.clone
     var tSecond = second.clone
@@ -83,7 +87,7 @@ class HammingDistance extends Distance {
     candidate
   }
 
-  override def toString = "Haming Distance"
+  override def toString = "Hamming Distance"
 }
 
 /**
@@ -94,7 +98,9 @@ class HammingDistance extends Distance {
  * @author Jonathan Wienss
  */
 class NumberOfInversionsDistance extends Distance {
+
   def getDistance[T](f: HashMap[T, Int], s: HashMap[T, Int]): Int = {
+
     val f2 = f.clone()
     var fSorted = f2.keySet.toList.sortBy(f2)
     val s2 = s.clone()
@@ -115,6 +121,7 @@ class NumberOfInversionsDistance extends Distance {
     }
     return result
   }
+
   private def depth[T](x: T, l: List[T]): (Int, List[T], List[T]) = {
     if (l.head == x) Tuple3(0, List(), l)
     else {
@@ -122,5 +129,6 @@ class NumberOfInversionsDistance extends Distance {
       Tuple3(r._1 + 1, l.head :: r._2, r._3)
     }
   }
+
   override def toString = "Number Of Inversions"
 }

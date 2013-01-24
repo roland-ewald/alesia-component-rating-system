@@ -65,7 +65,7 @@ class ActiveRanking(
 }
 
 /**
- * Abstract classes
+ *
  */
 abstract class TSComparator(useVirtualPlayerTeamWeighting: Boolean = false) {
   val components: Set[String] = getComponents // keeps track of all components
@@ -74,13 +74,13 @@ abstract class TSComparator(useVirtualPlayerTeamWeighting: Boolean = false) {
   def apply(): List[Set[String]] // compares simulators(or "teams") 
 }
 
-abstract class TSLogger() {
+trait TSLogger {
   def register(aR: ActiveRanking)
   def log() // reads current state of the experiment
   def save() // save results to file
 }
 
-abstract class StopCondition() {
+trait StopCondition {
   def register(aR: ActiveRanking)
   def apply(): Boolean // test on stop condition
 }
