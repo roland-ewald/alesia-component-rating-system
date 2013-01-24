@@ -71,18 +71,18 @@ trait ComponentRatingSystem extends java.util.Comparator[String] {
    * @param factor The Partial Play factor for this component. Standard is 1.0. E.g.: use 0.5 to achieve 50% Partial Play.
    */
   def setPartialPlayFactor(comp: String, factor: Double)
-  
+
   /**
-   * If True, the Partial Play factor of each componen in a compound algorithm is weighted against the number of components 
-   * in that algorithm in such a way, that the sum of all prefactors of components of that algorithm is 1. 
+   * If True, the Partial Play factor of each component in a compound algorithm is weighted against the number of components
+   * in that algorithm in such a way, that the sum of all pre-factors of components of that algorithm is 1.
    * In other words the number of other components of an algorithm is no longer affecting the ranking of a component.
    */
   def setWeightPartialPlayAgainstTeamSize(b: Boolean)
-  
+
   /**
-   * Inject the rating (points and uncertainty) of one component into the Rating System. The new rating overwrites any old 
+   * Inject the rating (points and uncertainty) of one component into the Rating System. The new rating overwrites any old
    * rating, this component might have had in the system before
-   * 
+   *
    */
-  def injectRating(comp:String, points:Double, uncertainty:Double): Unit
+  def injectRating(comp: String, points: Double, uncertainty: Double): Unit
 }

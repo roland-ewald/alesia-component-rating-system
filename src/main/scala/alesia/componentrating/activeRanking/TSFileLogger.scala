@@ -14,9 +14,11 @@ import alesia.componentrating.misc.Serializer
  */
 class TSFileLogger(targetFile: String = "unknown.xml", realRankingFile: String = "RealRanking filename missing.xml", distances: List[Distance], saveEveryXRounds: Int = 10)
   extends TSLogger {
+
   val data = new Round()
 
   private[this] var aR: ActiveRanking = null
+
   def register(aR: ActiveRanking) = TSFileLogger.this.aR = aR
 
   val realRankingHM = HashMap[String, Int]()
