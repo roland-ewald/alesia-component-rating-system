@@ -20,25 +20,35 @@ import com.weiglewilczek.slf4s.Logging
 @RunWith(classOf[JUnitRunner])
 class TestTrueSkillRatingSystem extends FunSpec with Logging {
 
-  /** Triplets: (Identifier, Strength, Supposed Ranking). */
-  val rp = List(
+  /** Players have an identifier, a strength, and a true ranking. */
+  type PlayerProperties = (String, Int, Int)
+
+  /** Test players. */
+  val players = List(
     ("Component A", 5, 3),
     ("Component B", 3, 4),
     ("Component C", 7, 2),
     ("Component D", 10, 1))
 
   describe("Four Components are ranked, 6 combinations") {
-    testSimpleRatingProblem(rp, Helper.linearCombination(rp, 2, false)) // 2 teams per game, no double occurrence of one team)
+    testSimpleRatingProblem(players, Helper.linearCombination(players, 2, false)) // 2 teams per game, no double occurrence of one team)
   }
+
   describe("Four Components are ranked, 5 combinations") {
-    testSimpleRatingProblem(rp, List(List(rp(0), rp(1)), List(rp(2), rp(3)), List(rp(0), rp(3)), List(rp(1), rp(2)), List(rp(2), rp(0))))
+    testSimpleRatingProblem(players, List(
+      List(players(0), players(1)),
+      List(players(2), players(3)),
+      List(players(0), players(3)),
+      List(players(1), players(2)),
+      List(players(2), players(0))))
   }
   describe("Four Components are ranked in 2 teams of 2") {
-    testMultiRatingProblem(rp, Helper.linearCombination(Helper.linearCombination(rp, 2, false), 2, false))
+    testMultiRatingProblem(players, Helper.linearCombination(Helper.linearCombination(players, 2, false), 2, false))
   }
   // Here: Each team consists of only one component (Player)
-  private def testSimpleRatingProblem(ratingProblem: List[Tuple3[String, Int, Int]], ganes: List[List[Tuple3[String, Int, Int]]]) {
-    val tsrs = new TrueSkillRatingSystem()
+  private def testSimpleRatingProblem(ratingProblem: List[PlayerProperties], ganes: List[List[PlayerProperties]]) {
+
+    val tsrs = new TrueSkillRatingSystem
 
     val combinations = ganes.map(l => l.sortBy(-_._2)).map(x => x.map(y => Set(y._1))) // Strength determines winning team
     combinations.foreach(tsrs.submitResults)
