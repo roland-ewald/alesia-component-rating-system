@@ -53,7 +53,7 @@ class TestTrueSkillRatingSystem extends FunSpec with Logging {
 
     val combinations = games.map(l => {
       l.sortBy( // Here sorting is used to put winning team first ...
-        l.map(l2 => { (l2, regressive(l2.map(_._2.toDouble), 0.0, addDouble)) }).toMap // .. for that we need a hashmap Team->Teamstrength (Sum of Component Strength): Done here.
+        l.map(l2 => { (l2, l2.map(_._2.toDouble).foldLeft(.0)(_ + _)) }).toMap // .. for that we need a hashmap Team->Teamstrength (Sum of Component Strength): Done here.
         ).reverse.map(x => x.toSet) // Teams get rearranged from List to Set here
     }).map(_.map(_.map(_._1))) // prune COmponent representation down to be only a String
     combinations.foreach(tsrs.submitResults)
@@ -72,12 +72,4 @@ class TestTrueSkillRatingSystem extends FunSpec with Logging {
     })
     assertCorrectRanking(l.tail, tsrs)
   }
-
-  def regressive[T](l: List[T], nul: T, function: (T, T) => T): T = {
-    var result: T = nul
-    l.foreach(x => result = function(result, x))
-    result
-  }
-
-  def addDouble(a: Double, b: Double): Double = a + b
 }
