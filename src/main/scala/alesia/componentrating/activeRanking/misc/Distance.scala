@@ -8,6 +8,7 @@ import scala.collection.mutable.HashMap
  * 		> 0 otherwise
  *
  * @author Jonathan Wienss
+ * @author Roland Ewald
  */
 abstract class Distance {
 
@@ -15,44 +16,25 @@ abstract class Distance {
    * The arrays/lists are provided in HashMaps (Element) -> (Position)
    * This allows empty positions etc.
    */
-  def getDistance[T](first: HashMap[T, Int], second: HashMap[T, Int]): Int
+  def getDistance[T](first: Map[T, Int], second: Map[T, Int]): Int
 
   /**
-   * Creates the intersection of Keysets of hashmaps
+   * Creates the intersection of maps (by their keys).
    */
-  def intersection[T](map: HashMap[T, Int], intersectWith: HashMap[T, Int]): (HashMap[T, Int]) = {
-    val result = HashMap[T, Int]()
-    map.keySet.foreach(e => if (intersectWith.keySet.contains(e)) result += e -> map(e))
-    return result
-  }
+  def intersection[A, B](m1: Map[A, B], m2: Map[A, _]): Map[A, B] =
+    m1.filter(x => m2.contains(x._1))
 
-  def getDistance[T](first: List[T], second: List[T]): Int = {
-    return getDistance(listToHM(first), listToHM(second))
-  }
+  def getDistance[T](first: List[T], second: List[T]): Int =
+    getDistance(first, second)
 
-  def getDistanceIntersected[T](first: HashMap[T, Int], second: HashMap[T, Int]): Int = {
-    return getDistance(intersection(first, second), intersection(second, first))
-  }
+  def getDistanceIntersected[T](first: Map[T, Int], second: Map[T, Int]): Int =
+    getDistance(intersection(first, second), intersection(second, first))
 
-  def getDistanceIntersected[T](first: List[T], second: List[T]): Int = {
-    val firstMap = HashMap[T, Int]()
-    val secondMap = HashMap[T, Int]()
+  def getDistanceIntersected[T](first: List[T], second: List[T]): Int =
+    getDistance(intersection(first, second), intersection(second, first))
 
-    var i = 0
-    first.foreach(e => { firstMap += e -> i; i = i + 1 })
-    i = 0
-    second.foreach(e => { secondMap += e -> i; i = i + 1 })
-
-    return getDistance(intersection(listToHM(first), listToHM(second)), intersection(listToHM(second), listToHM(first)))
-  }
-
-  def listToHM[T](list: List[T]): HashMap[T, Int] = {
-    val hM = HashMap[T, Int]()
-
-    var i = 0
-    list.foreach(e => { hM += e -> i; i = i + 1 })
-    hM
-  }
+  implicit def listToMap[T](list: List[T]): Map[T, Int] =
+    list.zipWithIndex.toMap
 }
 
 /**
@@ -67,9 +49,9 @@ abstract class Distance {
  */
 class HammingDistance extends Distance {
 
-  def getDistance[T](first: HashMap[T, Int], second: HashMap[T, Int]): Int = {
-    var tFirst = first.clone
-    var tSecond = second.clone
+  def getDistance[T](first: Map[T, Int], second: Map[T, Int]): Int = {
+    var tFirst: HashMap[T, Int] = new HashMap[T, Int]() ++ first
+    var tSecond: HashMap[T, Int] = new HashMap[T, Int]() ++ second
     var dist = 0
 
     first.keySet.foreach(key => {
@@ -99,11 +81,11 @@ class HammingDistance extends Distance {
  */
 class NumberOfInversionsDistance extends Distance {
 
-  def getDistance[T](f: HashMap[T, Int], s: HashMap[T, Int]): Int = {
+  def getDistance[T](f: Map[T, Int], s: Map[T, Int]): Int = {
 
-    val f2 = f.clone()
+    val f2: HashMap[T, Int] = new HashMap[T, Int]() ++ f
     var fSorted = f2.keySet.toList.sortBy(f2)
-    val s2 = s.clone()
+    val s2: HashMap[T, Int] = new HashMap[T, Int]() ++ s
     var sSorted = s2.keySet.toList.sortBy(s2)
 
     var result = 0

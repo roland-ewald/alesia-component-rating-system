@@ -35,7 +35,7 @@ class TSFileLogger(targetFile: String = "unknown.xml", realRankingFile: String =
     val playerBeliefSigma = HashMap[String, Double]()
     aR.comparator.components.foreach(p => playerBeliefSigma += p -> aR.tsrs.getUncertainty(p))
     val beliefRanking = playerBeliefMean.keySet.toList.sortBy(-1 * playerBeliefMean(_)) // NOTE: sort sorts from smallest to greatest
-    val distance = (distances zip distances.map(m => m.getDistanceIntersected(realRankingHM, m.listToHM(beliefRanking)))).toMap
+    val distance = (distances zip distances.map(m => m.getDistanceIntersected(realRankingHM.toMap, m.listToMap(beliefRanking)))).toMap
 
     data.setRound(replication, round, distance)
   }
