@@ -14,7 +14,7 @@ class TestDistance extends FunSpec {
 
   val invDist = NumberOfInversionsDistance()
 
-  val hammingDist = NumberOfInversionsDistance()
+  val hammingDist = HammingDistance()
 
   val distances = List(invDist, hammingDist)
 
@@ -22,7 +22,7 @@ class TestDistance extends FunSpec {
     it("cope with empty input") {
       distances.foreach(d => assert(0 === d.getDistance(List(), List())))
     }
-    it("detects wrong ordering") {
+    it("detect wrong ordering") {
       distances.foreach(d => assert(d.getDistance(List(1, 2), List(2, 1)) > 0))
     }
   }
