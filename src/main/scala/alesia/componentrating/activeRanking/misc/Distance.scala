@@ -25,7 +25,7 @@ abstract class Distance {
     m1.filter(x => m2.contains(x._1))
 
   def getDistance[T](first: List[T], second: List[T]): Int =
-    getDistance(first, second)
+    getDistance(listToMap(first), listToMap(second))
 
   def getDistanceIntersected[T](first: Map[T, Int], second: Map[T, Int]): Int =
     getDistance(intersection(first, second), intersection(second, first))
@@ -47,7 +47,7 @@ abstract class Distance {
  * missing rank: (a -> 1), (b -> 2), (c -> 4)  [<- should be rank 3]
  *
  */
-class HammingDistance extends Distance {
+case class HammingDistance() extends Distance {
 
   def getDistance[T](first: Map[T, Int], second: Map[T, Int]): Int = {
     var tFirst: HashMap[T, Int] = new HashMap[T, Int]() ++ first
@@ -79,7 +79,7 @@ class HammingDistance extends Distance {
  *
  * @author Jonathan Wienss
  */
-class NumberOfInversionsDistance extends Distance {
+case class NumberOfInversionsDistance() extends Distance {
 
   def getDistance[T](f: Map[T, Int], s: Map[T, Int]): Int = {
 
