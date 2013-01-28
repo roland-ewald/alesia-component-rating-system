@@ -68,8 +68,6 @@ case class HammingDistance() extends Distance {
     map.keySet.foreach(key => if (map(key) < map(candidate)) candidate = key)
     candidate
   }
-
-  override def toString = "Hamming Distance"
 }
 
 /**
@@ -78,39 +76,14 @@ case class HammingDistance() extends Distance {
  * Number of Inversions: Min steps of interchanging of two places to reach correct ordering
  *
  * @author Jonathan Wienss
+ * @author Roland Ewald
  */
 case class NumberOfInversionsDistance() extends Distance {
 
-  def getDistance[T](f: Map[T, Int], s: Map[T, Int]): Int = {
-
-    val f2: HashMap[T, Int] = new HashMap[T, Int]() ++ f
-    var fSorted = f2.keySet.toList.sortBy(f2)
-    val s2: HashMap[T, Int] = new HashMap[T, Int]() ++ s
-    var sSorted = s2.keySet.toList.sortBy(s2)
-
-    var result = 0
-    while (!(fSorted == List() && sSorted == List())) {
-      {
-        if (fSorted.head != sSorted.head) {
-          //invert
-          val a = depth(fSorted.head, sSorted)
-          result = result + a._1
-          sSorted = a._3.head :: a._2 ::: a._3.tail
-        }
-        fSorted = fSorted.tail
-        sSorted = sSorted.tail
-      }
-    }
-    return result
-  }
-
-  private def depth[T](x: T, l: List[T]): (Int, List[T], List[T]) = {
-    if (l.head == x) Tuple3(0, List(), l)
-    else {
-      var r = depth(x, l.tail)
-      Tuple3(r._1 + 1, l.head :: r._2, r._3)
-    }
-  }
-
-  override def toString = "Number Of Inversions"
+  override def getDistance[A](f: Map[A, Int], s: Map[A, Int]): Int = {
+    for (
+      e1 <- s.keys.toList;
+      e2 <- s.keys.toList if f(e1) < f(e2)
+    ) yield (if (s(e1) > s(e2)) 1 else 0)
+  }.sum
 }
