@@ -10,7 +10,7 @@ import scala.collection.mutable.HashMap
  * @author Jonathan Wienss
  * @author Roland Ewald
  */
-abstract class Distance {
+trait Distance {
 
   /**
    * The arrays/lists are provided in HashMaps (Element) -> (Position)
@@ -38,42 +38,25 @@ abstract class Distance {
 }
 
 /**
- * Hamming Distance ("Number of wrong digits").
+ * Hamming Distance. Counts the "number of wrong digits".
  *
  * Implemented to be invariant vs missing ranks (and thus intersections from above which very likely have missing ranks).
- *
- * @author Jonathan Wienss
- *
  * missing rank: (a -> 1), (b -> 2), (c -> 4)  [<- should be rank 3]
  *
+ * @author Jonathan Wienss
+ * @author Roland Ewald
  */
 case class HammingDistance() extends Distance {
 
-  def getDistance[T](first: Map[T, Int], second: Map[T, Int]): Int = {
-    var tFirst: HashMap[T, Int] = new HashMap[T, Int]() ++ first
-    var tSecond: HashMap[T, Int] = new HashMap[T, Int]() ++ second
-    var dist = 0
-
-    first.keySet.foreach(key => {
-      if (getMin(tFirst) != getMin(tSecond)) dist = dist + 1
-      tFirst.remove(getMin(tFirst))
-      tSecond.remove(getMin(tSecond))
-    })
-
-    return dist
-  }
-
-  def getMin[T](map: HashMap[T, Int]): T = {
-    var candidate = map.keySet.head
-    map.keySet.foreach(key => if (map(key) < map(candidate)) candidate = key)
-    candidate
+  override def getDistance[T](first: Map[T, Int], second: Map[T, Int]): Int = {
+    val pairsToMatch = first.toList.sortBy(_._2) zip second.toList.sortBy(_._2)
+    pairsToMatch.filter(x => x._1._1 != x._2._1).length
   }
 }
 
 /**
- * Number of Inversions as distance
- * One Inversion: Two Places are interchanged
- * Number of Inversions: Min steps of interchanging of two places to reach correct ordering
+ * Number of inversions as distance.
+ * An inversion is counted for each pair of elements whose ordering is wrong.
  *
  * @author Jonathan Wienss
  * @author Roland Ewald
@@ -83,7 +66,7 @@ case class NumberOfInversionsDistance() extends Distance {
   override def getDistance[A](f: Map[A, Int], s: Map[A, Int]): Int = {
     for (
       e1 <- s.keys.toList;
-      e2 <- s.keys.toList if f(e1) < f(e2)
-    ) yield (if (s(e1) > s(e2)) 1 else 0)
+      e2 <- s.keys.toList if s(e1) < s(e2)
+    ) yield (if (f(e1) > f(e2)) 1 else 0)
   }.sum
 }
