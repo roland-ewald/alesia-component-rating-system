@@ -38,11 +38,15 @@ trait Distance {
 }
 
 /**
- * Hamming Distance. Counts the "number of wrong digits".
- *
- * Implemented to be invariant vs missing ranks (and thus intersections from above which very likely have missing ranks).
- * missing rank: (a -> 1), (b -> 2), (c -> 4)  [<- should be rank 3]
- *
+ * Hamming Distance ("Number of different digits")
+ * 
+ * This implementation is robust with regards to missing places. 
+ * Example: compare the map[Element, place] 
+ * 		(a -> 1), (b -> 2), (c -> 4) 
+ * with
+ * 		(a -> 1), (c -> 42), (b -> 4)
+ * it yields a distance of 0. 
+ * 
  * @author Jonathan Wienss
  * @author Roland Ewald
  */
@@ -55,9 +59,15 @@ case class HammingDistance() extends Distance {
 }
 
 /**
- * Number of inversions as distance.
- * An inversion is counted for each pair of elements whose ordering is wrong.
- *
+ * Number of Inversions as distance
+ * One inversion means that two places are interchanged
+ * 
+ * example List:[Element] where the element index indicates its place
+ * 		(a,d,b,c) 
+ * compared to
+ * 		(a,b,c,d) 
+ * yields a distance of 2.
+ * 
  * @author Jonathan Wienss
  * @author Roland Ewald
  */
