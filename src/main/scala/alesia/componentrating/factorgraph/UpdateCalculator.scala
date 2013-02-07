@@ -14,7 +14,7 @@ import alesia.componentrating.misc.TrueSkillDefaultValues
  * @author: Jonathan Wienss
  *
  */
-object FactorGraphFactory {
+object UpdateCalculator {
 
   /**
    * Returns The Results of the RankCalculator for a given Game.

@@ -97,7 +97,7 @@ class TestTrueSkillVSOnlineRankCalc extends FunSpec with Logging {
    * @param playersAfterUpdate the list of expected updates
    */
   def checkTeams(teams: List[Team], playersAfterUpdate: List[Player]) = {
-    val updatedPlayers = FactorGraphFactory.factorGraphResults(teams)(dflt)
+    val updatedPlayers = UpdateCalculator.factorGraphResults(teams)(dflt)
     updatedPlayers.map(x => x).foreach(x => logger.info("Player: " + x))
     playersAfterUpdate.foreach(p1 => { assertPlayerResultsExist(p1, updatedPlayers); updatedPlayers.foreach(p2 => if (p1.id == p2.id) check(p1, p2)) })
   }
