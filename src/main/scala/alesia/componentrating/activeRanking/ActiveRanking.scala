@@ -5,35 +5,38 @@ import alesia.componentrating.TrueSkillRatingSystem
 import scala.util.Random
 import alesia.componentrating.misc.TrueSkillDefaultValues
 import alesia.componentrating.misc.AdvancedOptions
+import alesia.componentrating.ComponentRatingSystem
 
 /**
- * Active Ranking via TrueSkill.
- * Uses the Passive Rating (ComponentRatingSystem) with 2 new Components:
- * 		MatchUpSelector - Selects the best possible MatchUp of the Components and submits it
- * 				(Uses MatchQuality to determine, what is "best MatchUp")
- * 		Comparator - For each submitted MatchUp generates a comparison (one could say, winner, 2nd place, ..., looser).
- * 				The Comparisons are used for Ranking
- * 		Logger - (semi optional) Loggs the whole ranking (not only single comparisons)
- * 				Use a blank implementation if not needed.
- * 		StopCondition - used to stop the whole Ranking (which means, no more ratings / comparisons)
+ * Active Ranking via a component rating system. Uses the component rating system and three additional components:
+ *
+ * The <code>RankingComparator</code> generates a ranking (e.g.: winner, 2nd place, ..., looser) for some match-up.
+ * The comparisons are used for ranking the components.
+ *
+ * The <code>RatingLogger</code> logs the whole rating (not only single comparisons), per default nothing is logged.
+ *
+ * The <code>StopCondition</code> determines when the ActiveRanking should stop.
+ *
+ * @see MatchQuality
+ * @see MatchUpSelector
  *
  * @author Jonathan Wienss
  *
  */
 class ActiveRanking(
+  val crs: ComponentRatingSystem,
   val dflt: TrueSkillDefaultValues = new TrueSkillDefaultValues,
   val advOpt: AdvancedOptions = new AdvancedOptions,
   val rng: Random,
   val stopCondition: StopCondition,
-  val comparator: TSComparator,
-  logger: TSLogger) {
+  val comparator: RankingComparator,
+  val logger: RatingLogger = new LogNothing) {
 
   private[this] var round = 0
-  def currentRound = round
   private[this] var replication = 0
-  def currentReplication = replication
 
-  val tsrs = new TrueSkillRatingSystem()(dflt, advOpt)
+  def currentRound = round
+  def currentReplication = replication
 
   private def init() = {
     round = 0
@@ -45,44 +48,32 @@ class ActiveRanking(
 
   def execute() = {
     init()
-    while (!stopCondition()) { // iterate replications
-      tsrs.reset // clears the knowledgebase
-      while (!stopCondition()) { // iterate rounds (="games")
-        tsrs.submitResults(comparator())
-
+    // iterate replications
+    while (!stopCondition()) {
+      // clears knowledge base
+      crs.reset
+      // iterate rounds (="games")
+      while (!stopCondition()) {
+        crs.submitResults(comparator())
         logger.log
-
         round = round + 1
       }
-
       // prepare for next replication:
       round = 0
       replication = replication + 1
-      System.out.println("-Replication-")
+      println("Replication Done")
     }
-    logger.save // writes results to file
+    logger.save
   }
 }
 
 /**
- *
+ * Components that rely on a reference to the active ranking.
  */
-abstract class TSComparator(useVirtualPlayerTeamWeighting: Boolean = false) {
-  val components: Set[String] = getComponents // keeps track of all components
-  def getComponents: Set[String]
-  def register(aR: ActiveRanking)
-  def apply(): List[Set[String]] // compares simulators(or "teams") 
-}
+trait ActiveRankingComponent {
 
-trait TSLogger {
-  def register(aR: ActiveRanking)
-  def log() // reads current state of the experiment
-  def save() // save results to file
-}
-
-trait StopCondition {
-  def register(aR: ActiveRanking)
-  def apply(): Boolean // test on stop condition
+  /** Registers active ranking component to be logged. */
+  def register(ar: ActiveRanking)
 }
 
 

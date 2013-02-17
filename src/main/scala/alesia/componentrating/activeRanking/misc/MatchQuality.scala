@@ -5,9 +5,8 @@ import alesia.componentrating.misc.TrueSkillDefaultValues
 import alesia.componentrating.misc.AdvancedOptions
 
 /**
- * Quality of a MatchUp (possible Comparison of Components)
- * Used to determine the "best" MatchUp
- * High Quality -> good
+ * Quality of a match-up between available component teams.
+ * Used to determine the "best" match-up: the higher the quality, the better.
  *
  * @author Jonathan Wienss
  */
@@ -76,7 +75,6 @@ class AverageUncertaintyMatchQuality[T]()(implicit dflt: TrueSkillDefaultValues,
  */
 class PointsAndUncertaintyMatchQuality[T]()(implicit dflt: TrueSkillDefaultValues, advOpt: AdvancedOptions) extends MatchQuality[T]() {
 
-  
   var playerPoints: List[List[Double]] = null // Points of each Player
   var teamPointMap: Map[T, Double] = null // Team -> Points of this Teams
   var playerUncertainty: List[List[Double]] = null // uncertainty of Players

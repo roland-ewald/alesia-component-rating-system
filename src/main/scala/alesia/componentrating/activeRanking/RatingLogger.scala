@@ -7,23 +7,47 @@ import alesia.componentrating.misc.Helper
 import alesia.componentrating.misc.Serializer
 
 /**
- * FileLogger saves  the rating results to file.
+ * Saves the rating results.
  *
  * @author Jonathan Wienss
  *
  */
-class TSFileLogger(targetFile: String = "unknown.xml", realRankingFile: String = "RealRanking filename missing.xml", distances: List[Distance], saveEveryXRounds: Int = 10)
-  extends TSLogger {
+trait RatingLogger extends ActiveRankingComponent {
+  /** Stores current state of the experiment. */
+  def log()
+  /** Save results. */
+  def save()
+}
 
-  val data = new Round()
+/**
+ * Default implementation (nothing is logged).
+ */
+class LogNothing extends RatingLogger {
+  override def register(aR: ActiveRanking) = {}
+  override def log() = {}
+  override def save() = {}
+}
+
+/**
+ * Saves the rating results to file.
+ */
+class FileRatingLogger(
+  targetFile: String = "unknown.xml",
+  realRankingFile: String = "RealRanking filename missing.xml",
+  distances: List[Distance],
+  saveEveryXRounds: Int = 10) extends RatingLogger {
+
+  class Container(val stuff: List[(java.lang.String, Int)]) extends Serializable {}
+
+  val data = new Round
 
   private[this] var aR: ActiveRanking = null
 
-  def register(aR: ActiveRanking) = TSFileLogger.this.aR = aR
+  def register(aR: ActiveRanking) = this.aR = aR
 
   val realRankingHM = HashMap[String, Int]()
-  class Container(val stuff: List[(java.lang.String, Int)]) extends Serializable {}
-  (Serializer.fromFile(realRankingFile): List[(java.lang.String, Int)]).foreach(tupel => realRankingHM += tupel._1 -> tupel._2)
+
+  (Serializer.fromFile(realRankingFile): List[(java.lang.String, Int)]).foreach(x => realRankingHM += x._1 -> x._2)
 
   def log(): Unit = {
     val replication = aR.currentReplication
@@ -31,9 +55,9 @@ class TSFileLogger(targetFile: String = "unknown.xml", realRankingFile: String =
 
     if (!(round % saveEveryXRounds == 0)) return
     val playerBeliefMean = HashMap[String, Double]()
-    aR.comparator.components.foreach(p => playerBeliefMean += p -> Helper.salt(aR.tsrs.getPoints(p), aR.rng))
+    aR.comparator.components.foreach(p => playerBeliefMean += p -> Helper.salt(aR.crs.getPoints(p), aR.rng))
     val playerBeliefSigma = HashMap[String, Double]()
-    aR.comparator.components.foreach(p => playerBeliefSigma += p -> aR.tsrs.getUncertainty(p))
+    aR.comparator.components.foreach(p => playerBeliefSigma += p -> aR.crs.getUncertainty(p))
     val beliefRanking = playerBeliefMean.keySet.toList.sortBy(-1 * playerBeliefMean(_)) // NOTE: sort sorts from smallest to greatest
     val distance = (distances zip distances.map(m => m.getDistanceIntersected(realRankingHM.toMap, m.listToMap(beliefRanking)))).toMap
 

@@ -42,7 +42,7 @@ class TrueSkillRatingSystem(
   override def submitResults(rankingForProblem: List[Set[String]]) = {
     val playerLists = rankingForProblem.map(t => t.map(getPlayer).toList)
     val playerTeams = playerLists.map(x => Team(x: _*))
-    val updatedPlayers = UpdateCalculator.factorGraphResults(playerTeams)(dflt = implicitly, advOpt = advancedOptions)
+    val updatedPlayers = UpdateCalculator.factorGraphResults(playerTeams)
     var hm = scala.collection.mutable.HashMap[String, List[NormalDist]]()
     updatedPlayers.foreach(uP => updatedPlayers.foreach(uP2 => if (uP.id == (uP2.id)) hm += uP.id -> (uP2.skill.clone() :: hm.getOrElse(uP.id, List[NormalDist]()))))
     var newUpdatedPlayers = List[Player]()

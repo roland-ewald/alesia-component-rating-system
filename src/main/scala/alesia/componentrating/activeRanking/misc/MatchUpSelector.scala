@@ -5,7 +5,9 @@ import scala.util.Random
 import alesia.componentrating.misc.Helper
 
 /**
- * matchUpSelector choses the best MatchUp according to provided MatchQuality
+ * MatchUpSelector chooses the best team match-up according to provided MatchQuality.
+ *
+ * @see MatchQuality
  *
  * @author Jonathan Wienss
  *
