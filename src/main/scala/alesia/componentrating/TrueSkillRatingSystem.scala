@@ -69,3 +69,7 @@ class TrueSkillRatingSystem(
   override def injectRating(comp: String, points: Double, uncertainty: Double) = knowledgeBase.put(comp, Player(points, uncertainty, comp))
 
 }
+
+object TrueSkillRatingSystem {
+  def createDefaultSetup = new TrueSkillRatingSystem
+}

@@ -17,7 +17,7 @@ package alesia.componentrating
  * @author Michael Stein
  * @author Roland Ewald
  */
-trait ComponentRatingSystem extends java.util.Comparator[String] {
+trait ComponentRatingSystem extends IComponentRatingSystem {
 
   /**
    * Submits new results to knowledge base.
@@ -85,4 +85,12 @@ trait ComponentRatingSystem extends java.util.Comparator[String] {
    *
    */
   def injectRating(comp: String, points: Double, uncertainty: Double): Unit
+
+  //Methods for easier access from Java: 
+
+  override def injectRating(comp: String, points: java.lang.Double, uncertainty: java.lang.Double) = injectRating(comp, points, uncertainty)
+  
+  override def setWeightPartialPlayAgainstTeamSize(b: java.lang.Boolean) = setWeightPartialPlayAgainstTeamSize(b)
+  
+  override def setPartialPlayFactor(comp: java.lang.String, factor: java.lang.Double) = setPartialPlayFactor(comp, factor)
 }
