@@ -1,5 +1,5 @@
 Component Rating System
-Copyright 2012-2013 Jonathan Wienﬂ, Michael Stein, Roland Ewald
+Copyright 2012-2013 Jonathan Wienss, Michael Stein, Roland Ewald
 
 The software is based on several open-source projects:
 

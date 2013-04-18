@@ -7,6 +7,14 @@
     <format>zip</format>
   </formats>
 
+  <!-- Include all auxiliary files for release -->
+  <fileSets>
+    <fileSet>
+      <directory>${basedir}/src/main/resources</directory>
+	  <outputDirectory></outputDirectory>
+    </fileSet>
+  </fileSets>
+  
   <!-- Include all required libraries and all generated JAR files -->
   <dependencySets>
 
