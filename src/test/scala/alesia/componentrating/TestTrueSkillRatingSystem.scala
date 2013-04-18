@@ -59,15 +59,15 @@ class TestTrueSkillRatingSystem extends FunSpec with Logging {
     assertCorrectRanking(ranking, tsrs)
   }
 
-  // Here: Each team consists of only multiple components (Player)
+  // Here: Each team consists of only multiple components (player)
   private def testMultiRatingProblem(ratingProblem: List[Tuple3[String, Int, Int]], games: List[List[List[Tuple3[String, Int, Int]]]]) {
     val tsrs = new TrueSkillRatingSystem()
 
     val combinations = games.map(l => {
       l.sortBy( // Here sorting is used to put winning team first ...
-        l.map(l2 => { (l2, l2.map(_._2.toDouble).foldLeft(.0)(_ + _)) }).toMap // .. for that we need a hashmap Team->Teamstrength (Sum of Component Strength): Done here.
+        l.map(l2 => { (l2, l2.map(_._2.toDouble).foldLeft(.0)(_ + _)) }).toMap // .. for that we need a map team -> team strength
         ).reverse.map(x => x.toSet) // Teams get rearranged from List to Set here
-    }).map(_.map(_.map(_._1))) // prune COmponent representation down to be only a String
+    }).map(_.map(_.map(_._1))) // prune Component representation down to be only a String
     combinations.foreach(tsrs.submitResults)
 
     val ranking = ratingProblem.sortBy(_._3).map(x => x._1)
@@ -77,7 +77,7 @@ class TestTrueSkillRatingSystem extends FunSpec with Logging {
   private def assertCorrectRanking(l: List[String], tsrs: TrueSkillRatingSystem) {
     if (l.size == 1) return
     l.tail.foreach(x => {
-      it("assertes the correct Ranking of " + l.head + " and " + x) {
+      it("asserts the correct Ranking of " + l.head + " and " + x) {
         assertEquals("Correct Ranking", tsrs.compare(l.head, x), 1)
         assertEquals("Correct Ranking", tsrs.compare(x, l.head), -1)
       }

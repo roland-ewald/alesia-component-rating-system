@@ -1,5 +1,8 @@
 package alesia.componentrating
 
+import scala.collection.mutable.ListBuffer
+import java.util.ArrayList
+
 /**
  * General interface for component rating system.
  * This is intended to be used in passive way, i.e. submitting results via
@@ -86,11 +89,44 @@ trait ComponentRatingSystem extends IComponentRatingSystem {
    */
   def injectRating(comp: String, points: Double, uncertainty: Double): Unit
 
-  //Methods for easier access from Java: 
+  // Methods for easier access from Java: 
+
+  override def submitResults(rankingForProblem: java.util.List[java.util.Set[java.lang.String]]): Unit = {
+    val ranking = ListBuffer[Set[String]]()
+    for (i <- 0 until rankingForProblem.size()) {
+      val oldSet = rankingForProblem.get(i)
+      val newSet = ListBuffer[String]()
+      val it = oldSet.iterator()
+      while (it.hasNext) {
+        newSet += it.next()
+      }
+      ranking += newSet.toSet
+    }
+    submitResults(ranking.toList)
+  }
+
+  override def getComponentPoints(comp: java.lang.String): java.lang.Double = getPoints(comp)
+
+  override def getComponentUncertainty(comp: java.lang.String): java.lang.Double = getUncertainty(comp)
+
+  override def componentIsUpdated(comp: java.lang.String): Unit = componentUpdated(comp)
+
+  override def compareComponents(components: java.util.List[java.lang.String]): java.util.List[java.lang.String] = {
+    val newList = ListBuffer[java.lang.String]()
+    val it = components.iterator()
+    while (it.hasNext)
+      newList += it.next()
+
+    val rv = new ArrayList[java.lang.String]()
+    val results = compareComponents(newList: _*)
+    results.foreach(v => rv.add(v))
+    rv
+  }
+
+  override def setPartialPlayFactor(comp: java.lang.String, factor: java.lang.Double) = setPartialPlayFactor(comp, factor)
+
+  override def setWeightPartialPlayAgainstTeamSize(b: java.lang.Boolean) = setWeightPartialPlayAgainstTeamSize(b)
 
   override def injectRating(comp: String, points: java.lang.Double, uncertainty: java.lang.Double) = injectRating(comp, points, uncertainty)
-  
-  override def setWeightPartialPlayAgainstTeamSize(b: java.lang.Boolean) = setWeightPartialPlayAgainstTeamSize(b)
-  
-  override def setPartialPlayFactor(comp: java.lang.String, factor: java.lang.Double) = setPartialPlayFactor(comp, factor)
+
 }

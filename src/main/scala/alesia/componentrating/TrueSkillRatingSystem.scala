@@ -17,7 +17,7 @@ import alesia.componentrating.factorgraph.UpdateCalculator
  */
 class TrueSkillRatingSystem(
   implicit dflt: TrueSkillDefaultValues = new TrueSkillDefaultValues(),
-  advOpt: AdvancedOptions = new AdvancedOptions) extends ComponentRatingSystem {
+  advOpt: AdvancedOptions = new AdvancedOptions()) extends ComponentRatingSystem {
 
   val updateUncertainyFactory = 1.5
 
