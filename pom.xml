@@ -143,28 +143,6 @@
 					<runOrder>random</runOrder>
 				</configuration>
 			</plugin>
-
-			<!-- Packaging -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2.1</version>
-				<configuration>
-					<descriptors>
-						<descriptor>release.xml</descriptor>
-					</descriptors>
-					<finalName>ComponentRatingSystem-${project.version}</finalName>
-				</configuration>
-				<executions>
-					<execution>
-						<id>dist-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 </project>

@@ -3,27 +3,43 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>alesia</groupId>
 	<artifactId>component-rating-system-release</artifactId>
-	<packaging>pom</packaging>	
-	<name>ALeSiA utilities: Component Rating System</name>
+	<packaging>pom</packaging>
+	<name>ALeSiA utilities: Component Rating System (Release)</name>
+	<version>0.1</version>
 
-	 <parent>
-    <groupId>alesia</groupId>
-    <artifactId>alesia-component-rating-system</artifactId>
-    <version>0.1-SNAPSHOT</version>
-    <relativePath>../.</relativePath>
-	</parent>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<crs.version>0.1-SNAPSHOT</crs.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>alesia</groupId>
 			<artifactId>alesia-component-rating-system</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>${crs.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>alesia</groupId>
+			<artifactId>alesia-component-rating-system</artifactId>
+			<version>${crs.version}</version>
+			<classifier>sources</classifier>
+		</dependency>
+		<dependency>
+			<groupId>alesia</groupId>
+			<artifactId>alesia-component-rating-system</artifactId>
+			<version>${crs.version}</version>
+			<classifier>tests</classifier>
+		</dependency>
+		<dependency>
+			<groupId>alesia</groupId>
+			<artifactId>alesia-component-rating-system</artifactId>
+			<version>${crs.version}</version>
+			<classifier>test-sources</classifier>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
-			<!-- Packaging -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
