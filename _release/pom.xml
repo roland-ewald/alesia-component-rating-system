@@ -9,7 +9,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<crs.version>0.1-SNAPSHOT</crs.version>
+		<crs.version>0.1</crs.version>
 	</properties>
 
 	<dependencies>
