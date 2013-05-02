@@ -4,7 +4,7 @@
 	<groupId>alesia</groupId>
 	<artifactId>alesia-component-rating-system</artifactId>
 	<packaging>jar</packaging>
-	<version>0.2-SNAPSHOT</version>
+	<version>0.2</version>
 	<name>ALeSiA utilities: Component Rating System</name>
 
 	<properties>
