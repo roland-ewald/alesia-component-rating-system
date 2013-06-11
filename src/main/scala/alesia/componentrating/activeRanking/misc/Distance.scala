@@ -17,6 +17,8 @@ package alesia.componentrating.activeRanking.misc
 
 import scala.collection.mutable.HashMap
 
+import scala.language.implicitConversions
+
 /**
  * Distance: Function of two arrays (Lists) of "Things"
  * 		= 0 if both are the same
