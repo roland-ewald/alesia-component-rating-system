@@ -62,7 +62,7 @@ class FileRatingLogger(
 
   val realRankingHM = HashMap[String, Int]()
 
-  (Serializer.fromFile(realRankingFile): List[(java.lang.String, Int)]).foreach(x => realRankingHM += x._1 -> x._2)
+  (Serializer.listFromFile(realRankingFile): List[(java.lang.String, Int)]).foreach(x => realRankingHM += x._1 -> x._2)
 
   def log(): Unit = {
     val replication = aR.currentReplication
